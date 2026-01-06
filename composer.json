@@ -1,0 +1,100 @@
+{
+    "name": "easysystem-gy/romusb2c",
+    "description": "Site web B2C Romusworld - Solutions pour murs et sols",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.romusworld.com",
+    "support": {
+        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
+        "chat": "https://www.drupal.org/node/314178"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "composer/installers": "^2.0",
+        "drupal/core-composer-scaffold": "^10.2",
+        "drupal/core-project-message": "^10.2",
+        "drupal/core-recommended": "^10.2",
+        "drupal/admin_toolbar": "^3.4",
+        "drupal/pathauto": "^1.12",
+        "drupal/metatag": "^2.0",
+        "drupal/token": "^1.13",
+        "drupal/field_group": "^3.4",
+        "drupal/paragraphs": "^1.17",
+        "drupal/entity_reference_revisions": "^1.10",
+        "drupal/commerce": "^2.38",
+        "drupal/search_api": "^1.31",
+        "drupal/facets": "^2.0",
+        "drupal/image_style_quality": "^1.6",
+        "drupal/webform": "^6.2",
+        "drupal/google_analytics": "^4.0",
+        "drupal/backup_migrate": "^5.0",
+        "drupal/redirect": "^1.9",
+        "drupal/xmlsitemap": "^1.5",
+        "drupal/language": "^1.0",
+        "drupal/content_translation": "^1.0",
+        "drupal/config_translation": "^1.0",
+        "drupal/locale": "^1.0",
+        "drush/drush": "^12.4"
+    },
+    "require-dev": {
+        "drupal/core-dev": "^10.2"
+    },
+    "conflict": {
+        "drupal/drupal": "*"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "drupal/core-composer-scaffold": true,
+            "drupal/core-project-message": true,
+            "phpstan/extension-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "web/"
+            }
+        },
+        "installer-paths": {
+            "web/core": ["type:drupal-core"],
+            "web/libraries/{$name}": ["type:drupal-library"],
+            "web/modules/contrib/{$name}": ["type:drupal-module"],
+            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "web/themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/Commands/contrib/{$name}": ["type:drupal-drush"],
+            "web/modules/custom/{$name}": ["type:drupal-custom-module"],
+            "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
+        },
+        "drupal-core-project-message": {
+            "include-keys": ["homepage", "support"],
+            "post-create-project-cmd-message": [
+                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>  Félicitations, vous avez installé Romusworld B2C !    </>",
+                "<bg=blue;fg=white>                                                         </>",
+                "",
+                "<bg=yellow;fg=black>Prochaines étapes :</>",
+                "  * Installer le site : composer install",
+                "  * Créer la base de données PostgreSQL",
+                "  * Configurer web/sites/default/settings.php",
+                "  * Installer Drupal : drush site:install",
+                "",
+                "Pour plus d'informations, consultez :",
+                "  * https://www.drupal.org/docs/user_guide/en/index.html",
+                "  * https://www.drupal.org/node/3060/release"
+            ]
+        }
+    }
+}
+

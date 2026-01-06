@@ -1,0 +1,293 @@
+{#
+/**
+ * @file
+ * Template pour l'affichage des produits tapis/signalétique
+ */
+#}
+
+{{ attach_library('romusworld/product-page') }}
+
+<article{{ attributes.addClass('product-page', 'product-tapis') }}>
+  
+  {# Fil d'Ariane #}
+  {% if breadcrumb %}
+    <nav class="breadcrumb-nav" aria-label="{{ 'Fil d\'Ariane'|t }}">
+      <div class="container">
+        {{ breadcrumb }}
+      </div>
+    </nav>
+  {% endif %}
+
+  <div class="container">
+    <div class="row">
+      
+      {# Galerie d'images - Colonne gauche #}
+      <div class="col-lg-6">
+        <div class="product-gallery">
+          {% if content.field_images %}
+            <div class="gallery-main">
+              {{ content.field_images }}
+            </div>
+          {% endif %}
+          
+          {# Badges produit #}
+          <div class="product-badges">
+            {% if content.field_normes %}
+              <span class="badge badge-success">{{ 'Conforme normes'|t }}</span>
+            {% endif %}
+            {% if node.isSticky %}
+              <span class="badge badge-primary">{{ 'Produit phare'|t }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {# Informations produit - Colonne droite #}
+      <div class="col-lg-6">
+        <div class="product-info">
+          
+          {# En-tête produit #}
+          <header class="product-header">
+            {{ title_prefix }}
+            <h1{{ title_attributes.addClass('product-title') }}>{{ label }}</h1>
+            {{ title_suffix }}
+            
+            {% if content.field_code_produit %}
+              <div class="product-code">
+                <strong>{{ 'Référence :'|t }}</strong> {{ content.field_code_produit }}
+              </div>
+            {% endif %}
+            
+            {% if content.field_categories %}
+              <div class="product-categories">
+                {{ content.field_categories }}
+              </div>
+            {% endif %}
+          </header>
+
+          {# Description courte #}
+          {% if content.body %}
+            <div class="product-description">
+              {{ content.body }}
+            </div>
+          {% endif %}
+
+          {# Caractéristiques principales #}
+          <div class="product-specs-summary">
+            <div class="row">
+              {% if content.field_dimensions %}
+                <div class="col-md-6">
+                  <div class="spec-item">
+                    <strong>{{ 'Dimensions :'|t }}</strong>
+                    {{ content.field_dimensions }}
+                  </div>
+                </div>
+              {% endif %}
+              
+              {% if content.field_epaisseur %}
+                <div class="col-md-6">
+                  <div class="spec-item">
+                    <strong>{{ 'Épaisseur :'|t }}</strong>
+                    {{ content.field_epaisseur }} mm
+                  </div>
+                </div>
+              {% endif %}
+              
+              {% if content.field_materiaux %}
+                <div class="col-md-6">
+                  <div class="spec-item">
+                    <strong>{{ 'Matériaux :'|t }}</strong>
+                    {{ content.field_materiaux }}
+                  </div>
+                </div>
+              {% endif %}
+              
+              {% if content.field_resistance_trafic %}
+                <div class="col-md-6">
+                  <div class="spec-item">
+                    <strong>{{ 'Trafic :'|t }}</strong>
+                    {{ content.field_resistance_trafic }}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          {# Prix et actions d'achat #}
+          <div class="product-purchase">
+            {% if content.field_prix_ttc %}
+              <div class="product-price">
+                <span class="price-label">{{ 'Prix TTC :'|t }}</span>
+                <span class="price-value">{{ content.field_prix_ttc }} €</span>
+                {% if content.field_prix_ht %}
+                  <span class="price-ht">({{ content.field_prix_ht }} € HT)</span>
+                {% endif %}
+              </div>
+            {% endif %}
+            
+            {# Variantes (couleurs, dimensions) #}
+            {% if content.field_couleurs %}
+              <div class="product-variants">
+                <label>{{ 'Couleurs disponibles :'|t }}</label>
+                {{ content.field_couleurs }}
+              </div>
+            {% endif %}
+            
+            {# Actions d'achat #}
+            <div class="product-actions">
+              <button type="button" class="btn btn-primary btn-lg add-to-cart" 
+                      data-product-id="{{ node.id }}">
+                <i class="icon-cart"></i>
+                {{ 'Ajouter au panier'|t }}
+              </button>
+              
+              <button type="button" class="btn btn-outline add-to-wishlist" 
+                      data-product-id="{{ node.id }}">
+                <i class="icon-heart"></i>
+                {{ 'Ajouter aux favoris'|t }}
+              </button>
+            </div>
+            
+            {# Informations de livraison #}
+            <div class="delivery-info">
+              <div class="delivery-item">
+                <i class="icon-truck"></i>
+                <span>{{ 'Livraison sous 3-5 jours ouvrés'|t }}</span>
+              </div>
+              <div class="delivery-item">
+                <i class="icon-return"></i>
+                <span>{{ 'Retour gratuit sous 30 jours'|t }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    {# Onglets d'informations détaillées #}
+    <div class="product-details-tabs">
+      <nav class="tabs-nav">
+        <button class="tab-button active" data-tab="specifications">
+          {{ 'Caractéristiques techniques'|t }}
+        </button>
+        <button class="tab-button" data-tab="usage">
+          {{ 'Usages et pose'|t }}
+        </button>
+        <button class="tab-button" data-tab="documents">
+          {{ 'Documentation'|t }}
+        </button>
+        <button class="tab-button" data-tab="reviews">
+          {{ 'Avis clients'|t }}
+        </button>
+      </nav>
+
+      <div class="tabs-content">
+        
+        {# Onglet Caractéristiques techniques #}
+        <div class="tab-panel active" id="specifications">
+          {% if content.field_caracteristiques_techniques %}
+            <div class="specifications-content">
+              {{ content.field_caracteristiques_techniques }}
+            </div>
+          {% endif %}
+          
+          {# Tableau des spécifications #}
+          <div class="specifications-table">
+            <table class="table">
+              <tbody>
+                {% if content.field_dimensions %}
+                  <tr>
+                    <td><strong>{{ 'Dimensions'|t }}</strong></td>
+                    <td>{{ content.field_dimensions }}</td>
+                  </tr>
+                {% endif %}
+                {% if content.field_epaisseur %}
+                  <tr>
+                    <td><strong>{{ 'Épaisseur'|t }}</strong></td>
+                    <td>{{ content.field_epaisseur }} mm</td>
+                  </tr>
+                {% endif %}
+                {% if content.field_materiaux %}
+                  <tr>
+                    <td><strong>{{ 'Matériaux'|t }}</strong></td>
+                    <td>{{ content.field_materiaux }}</td>
+                  </tr>
+                {% endif %}
+                {% if content.field_resistance_trafic %}
+                  <tr>
+                    <td><strong>{{ 'Résistance au trafic'|t }}</strong></td>
+                    <td>{{ content.field_resistance_trafic }}</td>
+                  </tr>
+                {% endif %}
+                {% if content.field_type_pose %}
+                  <tr>
+                    <td><strong>{{ 'Type de pose'|t }}</strong></td>
+                    <td>{{ content.field_type_pose }}</td>
+                  </tr>
+                {% endif %}
+                {% if content.field_normes %}
+                  <tr>
+                    <td><strong>{{ 'Normes et certifications'|t }}</strong></td>
+                    <td>{{ content.field_normes }}</td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {# Onglet Usages et pose #}
+        <div class="tab-panel" id="usage">
+          {% if content.field_usages_recommandes %}
+            <div class="usage-content">
+              <h3>{{ 'Usages recommandés'|t }}</h3>
+              {{ content.field_usages_recommandes }}
+            </div>
+          {% endif %}
+          
+          {% if content.field_usages %}
+            <div class="usage-contexts">
+              <h3>{{ 'Contextes d\'utilisation'|t }}</h3>
+              {{ content.field_usages }}
+            </div>
+          {% endif %}
+        </div>
+
+        {# Onglet Documentation #}
+        <div class="tab-panel" id="documents">
+          {% if content.field_documents_techniques %}
+            <div class="documents-list">
+              <h3>{{ 'Documents techniques'|t }}</h3>
+              {{ content.field_documents_techniques }}
+            </div>
+          {% endif %}
+        </div>
+
+        {# Onglet Avis clients #}
+        <div class="tab-panel" id="reviews">
+          <div class="reviews-section">
+            <h3>{{ 'Avis clients'|t }}</h3>
+            {# Ici sera intégré le système d'avis #}
+            <p>{{ 'Soyez le premier à donner votre avis sur ce produit.'|t }}</p>
+            <button class="btn btn-outline">{{ 'Laisser un avis'|t }}</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    {# Produits associés #}
+    {% if content.field_produits_associes %}
+      <section class="related-products">
+        <h2>{{ 'Produits complémentaires'|t }}</h2>
+        <div class="products-grid">
+          {{ content.field_produits_associes }}
+        </div>
+      </section>
+    {% endif %}
+
+  </div>
+
+</article>
+

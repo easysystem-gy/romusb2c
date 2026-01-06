@@ -1,0 +1,291 @@
+{#
+/**
+ * @file
+ * Template pour la page d'accueil Romusworld
+ */
+#}
+
+{{ attach_library('romusworld/homepage') }}
+
+<div class="page-wrapper">
+  {# En-tête avec navigation #}
+  {% if page.header %}
+    <header class="site-header" role="banner">
+      {{ page.header }}
+    </header>
+  {% endif %}
+
+  {# Menu principal #}
+  {% if page.primary_menu %}
+    <nav class="main-navigation" role="navigation" aria-label="{{ 'Menu principal'|t }}">
+      {{ page.primary_menu }}
+    </nav>
+  {% endif %}
+
+  {# Héro avec vidéo introductive #}
+  <section class="hero-section">
+    <div class="hero-video-container">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="{{ base_path ~ directory }}/videos/romus-intro.mp4" type="video/mp4">
+        <source src="{{ base_path ~ directory }}/videos/romus-intro.webm" type="video/webm">
+      </video>
+      <div class="hero-overlay"></div>
+    </div>
+    
+    <div class="hero-content">
+      <div class="container">
+        <div class="hero-text">
+          <h1 class="hero-title">{{ 'Solutions professionnelles pour murs et sols'|t }}</h1>
+          <p class="hero-subtitle">
+            {{ 'Découvrez notre gamme complète de tapis techniques, signalétique tactile et outillage professionnel pour tous vos projets de revêtements.'|t }}
+          </p>
+          <div class="hero-actions">
+            <a href="/produits" class="btn btn-primary btn-lg">
+              {{ 'Découvrir nos produits'|t }}
+            </a>
+            <a href="/solutions" class="btn btn-outline btn-lg">
+              {{ 'Nos solutions'|t }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# Sections principales #}
+  <main class="main-content" role="main">
+    
+    {# Section produits phares #}
+    <section class="featured-products-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2>{{ 'Nos produits phares'|t }}</h2>
+          <p class="section-subtitle">
+            {{ 'Une sélection de nos meilleures solutions pour vos projets'|t }}
+          </p>
+        </div>
+        
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="product-category-card">
+              <div class="category-image">
+                <img src="{{ base_path ~ directory }}/images/categories/tapis-techniques.jpg" 
+                     alt="{{ 'Tapis techniques'|t }}" loading="lazy">
+              </div>
+              <div class="category-content">
+                <h3>{{ 'Tapis techniques'|t }}</h3>
+                <p>{{ 'Tapis en rouleaux, rigides, modulaires et lavables pour tous types d\'environnements.'|t }}</p>
+                <a href="/produits/tapis-techniques" class="btn btn-outline">
+                  {{ 'Découvrir'|t }}
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-4 col-md-6">
+            <div class="product-category-card">
+              <div class="category-image">
+                <img src="{{ base_path ~ directory }}/images/categories/signaletique-tactile.jpg" 
+                     alt="{{ 'Signalétique tactile'|t }}" loading="lazy">
+              </div>
+              <div class="category-content">
+                <h3>{{ 'Signalétique tactile'|t }}</h3>
+                <p>{{ 'Dalles podotactiles, bandes d\'éveil et solutions d\'accessibilité conformes aux normes.'|t }}</p>
+                <a href="/produits/signaletique-tactile" class="btn btn-outline">
+                  {{ 'Découvrir'|t }}
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-lg-4 col-md-6">
+            <div class="product-category-card">
+              <div class="category-image">
+                <img src="{{ base_path ~ directory }}/images/categories/outillage.jpg" 
+                     alt="{{ 'Outillage professionnel'|t }}" loading="lazy">
+              </div>
+              <div class="category-content">
+                <h3>{{ 'Outillage professionnel'|t }}</h3>
+                <p>{{ 'Outils spécialisés pour la pose et la finition de revêtements sols et murs.'|t }}</p>
+                <a href="/produits/outillage" class="btn btn-outline">
+                  {{ 'Découvrir'|t }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# Section solutions par usage #}
+    <section class="solutions-section bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="solutions-content">
+              <h2>{{ 'Solutions adaptées à vos besoins'|t }}</h2>
+              <p>
+                {{ 'Que vous soyez architecte, maître d\'œuvre ou poseur professionnel, nous avons les solutions adaptées à vos projets.'|t }}
+              </p>
+              
+              <div class="solutions-list">
+                <div class="solution-item">
+                  <div class="solution-icon">
+                    <img src="{{ base_path ~ directory }}/images/icons/accessibility.svg" 
+                         alt="{{ 'Accessibilité'|t }}">
+                  </div>
+                  <div class="solution-content">
+                    <h4>{{ 'Accessibilité PMR'|t }}</h4>
+                    <p>{{ 'Solutions conformes aux normes d\'accessibilité pour personnes à mobilité réduite.'|t }}</p>
+                  </div>
+                </div>
+                
+                <div class="solution-item">
+                  <div class="solution-icon">
+                    <img src="{{ base_path ~ directory }}/images/icons/safety.svg" 
+                         alt="{{ 'Sécurité'|t }}">
+                  </div>
+                  <div class="solution-content">
+                    <h4>{{ 'Sécurité des circulations'|t }}</h4>
+                    <p>{{ 'Produits antidérapants et signalétique pour sécuriser les déplacements.'|t }}</p>
+                  </div>
+                </div>
+                
+                <div class="solution-item">
+                  <div class="solution-icon">
+                    <img src="{{ base_path ~ directory }}/images/icons/durability.svg" 
+                         alt="{{ 'Durabilité'|t }}">
+                  </div>
+                  <div class="solution-content">
+                    <h4>{{ 'Résistance au trafic'|t }}</h4>
+                    <p>{{ 'Matériaux haute performance pour environnements à fort passage.'|t }}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <a href="/solutions" class="btn btn-primary">
+                {{ 'Voir toutes nos solutions'|t }}
+              </a>
+            </div>
+          </div>
+          
+          <div class="col-lg-6">
+            <div class="solutions-image">
+              <img src="{{ base_path ~ directory }}/images/solutions-showcase.jpg" 
+                   alt="{{ 'Nos solutions en action'|t }}" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# Section réalisations #}
+    <section class="realizations-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2>{{ 'Nos dernières réalisations'|t }}</h2>
+          <p class="section-subtitle">
+            {{ 'Découvrez comment nos produits s\'intègrent dans des projets réels'|t }}
+          </p>
+        </div>
+        
+        {# Ici sera intégrée une vue Drupal des dernières réalisations #}
+        {% if page.featured_realizations %}
+          {{ page.featured_realizations }}
+        {% endif %}
+        
+        <div class="text-center mt-4">
+          <a href="/inspiration" class="btn btn-outline">
+            {{ 'Voir toutes nos réalisations'|t }}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {# Section newsletter et contact #}
+    <section class="newsletter-section bg-primary">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="text-white">{{ 'Restez informé de nos nouveautés'|t }}</h2>
+            <p class="text-white mb-4">
+              {{ 'Inscrivez-vous à notre newsletter pour recevoir nos dernières actualités, nouveaux produits et conseils techniques.'|t }}
+            </p>
+            
+            {# Formulaire newsletter - sera intégré avec Webform #}
+            <form class="newsletter-form" action="/newsletter/subscribe" method="post">
+              <div class="form-group d-flex">
+                <input type="email" class="form-control" placeholder="{{ 'Votre adresse email'|t }}" required>
+                <button type="submit" class="btn btn-secondary ml-2">
+                  {{ 'S\'inscrire'|t }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# Contenu principal de la page (si défini) #}
+    {% if page.content %}
+      <section class="page-content">
+        <div class="container">
+          {{ page.content }}
+        </div>
+      </section>
+    {% endif %}
+
+  </main>
+
+  {# Pied de page #}
+  {% if page.footer_first or page.footer_second or page.footer_third or page.footer_fourth %}
+    <footer class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="row">
+          {% if page.footer_first %}
+            <div class="col-lg-3 col-md-6">
+              {{ page.footer_first }}
+            </div>
+          {% endif %}
+          
+          {% if page.footer_second %}
+            <div class="col-lg-3 col-md-6">
+              {{ page.footer_second }}
+            </div>
+          {% endif %}
+          
+          {% if page.footer_third %}
+            <div class="col-lg-3 col-md-6">
+              {{ page.footer_third }}
+            </div>
+          {% endif %}
+          
+          {% if page.footer_fourth %}
+            <div class="col-lg-3 col-md-6">
+              {{ page.footer_fourth }}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="footer-bottom">
+          <div class="row">
+            <div class="col-md-6">
+              <p class="copyright">
+                © {{ "now"|date("Y") }} Romus. {{ 'Tous droits réservés.'|t }}
+              </p>
+            </div>
+            <div class="col-md-6 text-right">
+              <nav class="footer-legal">
+                <a href="/mentions-legales">{{ 'Mentions légales'|t }}</a>
+                <a href="/politique-confidentialite">{{ 'Politique de confidentialité'|t }}</a>
+                <a href="/cgv">{{ 'CGV'|t }}</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  {% endif %}
+
+</div>
+
