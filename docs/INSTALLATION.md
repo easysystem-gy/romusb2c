@@ -138,11 +138,28 @@ $settings['hash_salt'] = 'GENERER_UNE_CLE_ALEATOIRE_LONGUE_ET_SECURISEE';
 
 ### 6. Configuration post-installation
 
-#### Permissions des fichiers
+#### Création des répertoires système et permissions
 ```bash
+# Création des répertoires nécessaires pour Drupal
+mkdir -p web/sites/default/files/css
+mkdir -p web/sites/default/files/js
+mkdir -p web/sites/default/files/styles
+mkdir -p web/sites/default/files/translations
+
+# Configuration des permissions
 chmod 644 web/sites/default/settings.php
 chmod 755 web/sites/default/files
+chmod 755 web/sites/default/files/css
+chmod 755 web/sites/default/files/js
+chmod 755 web/sites/default/files/styles
+chmod 755 web/sites/default/files/translations
 ```
+
+**Important** : Ces répertoires sont essentiels pour :
+- `css/` : Fichiers CSS agrégés par Drupal
+- `js/` : Fichiers JavaScript agrégés
+- `styles/` : Images redimensionnées automatiquement
+- `translations/` : Fichiers de traduction téléchargés
 
 #### Configuration multilingue (optionnel)
 ```bash
@@ -328,6 +345,28 @@ CSS_JS_PREPROCESS=1
 ./vendor/bin/drush en commerce commerce_product commerce_cart commerce_checkout commerce_order commerce_payment commerce_price -y
 ./vendor/bin/drush cache:rebuild
 ```
+
+#### Répertoire files manquant ou CSS non chargés
+```bash
+# Créer les répertoires système manquants
+mkdir -p web/sites/default/files/css
+mkdir -p web/sites/default/files/js
+mkdir -p web/sites/default/files/styles
+mkdir -p web/sites/default/files/translations
+
+# Configurer les permissions
+chmod 755 web/sites/default/files
+chmod 755 web/sites/default/files/css
+chmod 755 web/sites/default/files/js
+chmod 755 web/sites/default/files/styles
+chmod 755 web/sites/default/files/translations
+
+# Vider le cache
+./vendor/bin/drush cache:rebuild
+```
+
+**Symptômes** : Site sans styles CSS, erreurs dans les logs Drupal
+**Cause** : Drupal ne peut pas créer les fichiers CSS/JS agrégés
 
 #### Erreur "Unknown themes: romusworld"
 ```bash
