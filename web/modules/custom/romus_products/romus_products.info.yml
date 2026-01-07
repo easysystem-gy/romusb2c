@@ -1,0 +1,14 @@
+name: 'Romus Products'
+type: module
+description: 'Module personnalisé pour la gestion des produits Romus (tapis, outillage, signalétique)'
+core_version_requirement: ^10
+package: 'Romus'
+dependencies:
+  - drupal:node
+  - drupal:field
+  - drupal:image
+  - drupal:file
+  - drupal:taxonomy
+  - drupal:path
+  - drupal:menu_ui
+

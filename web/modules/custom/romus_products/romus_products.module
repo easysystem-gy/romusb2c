@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Module Romus Products - Gestion des produits Romus.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_help().
+ */
+function romus_products_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.romus_products':
+      return '<p>' . t('Module de gestion des produits Romus : tapis techniques, outillage, signalétique tactile.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function romus_products_theme($existing, $type, $theme, $path) {
+  return [
+    'node__produit_tapis' => [
+      'template' => 'node--produit-tapis',
+      'base hook' => 'node',
+    ],
+    'node__produit_outillage' => [
+      'template' => 'node--produit-outillage', 
+      'base hook' => 'node',
+    ],
+    'node__produit_signaletique' => [
+      'template' => 'node--produit-signaletique',
+      'base hook' => 'node',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function romus_products_node_presave(EntityInterface $entity) {
+  // Logique personnalisée avant sauvegarde des produits
+  if (in_array($entity->bundle(), ['produit_tapis', 'produit_outillage', 'produit_signaletique'])) {
+    // Génération automatique du code produit si vide
+    if (empty($entity->get('field_code_produit')->value)) {
+      $entity->set('field_code_produit', _romus_products_generate_code($entity));
+    }
+  }
+}
+
+/**
+ * Génère un code produit automatique.
+ */
+function _romus_products_generate_code(EntityInterface $entity) {
+  $prefix = '';
+  switch ($entity->bundle()) {
+    case 'produit_tapis':
+      $prefix = 'TAP';
+      break;
+    case 'produit_outillage':
+      $prefix = 'OUT';
+      break;
+    case 'produit_signaletique':
+      $prefix = 'SIG';
+      break;
+  }
+  
+  return $prefix . '-' . strtoupper(substr(md5($entity->getTitle() . time()), 0, 6));
+}
+
