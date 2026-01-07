@@ -73,14 +73,21 @@ cp web/sites/default/default.settings.php web/sites/default/settings.php
 # Installer Drupal
 drush site:install --db-url=pgsql://username:password@localhost/romusworld_db
 
-# Importer la configuration
-drush config:import
-
 # Activer les modules de langue (inclus dans Core)
 drush en language content_translation config_translation locale -y
 
+# Activer les modules personnalisés Romus
+drush en romus_products romus_commerce -y
+
+# Activer le thème Romusworld
+drush theme:enable romusworld
+drush config:set system.theme default romusworld
+
 # Vider les caches
 drush cache:rebuild
+
+# Exporter la configuration initiale (optionnel)
+drush config:export
 ```
 
 ### Configuration PostgreSQL
