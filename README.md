@@ -62,6 +62,8 @@ cd romusb2c
 # Installer les dépendances
 composer install
 
+# Note: Les modules de langue sont inclus dans Drupal Core
+
 # Créer la base de données PostgreSQL
 createdb romusworld_db
 
@@ -73,6 +75,9 @@ drush site:install --db-url=pgsql://username:password@localhost/romusworld_db
 
 # Importer la configuration
 drush config:import
+
+# Activer les modules de langue (inclus dans Core)
+drush en language content_translation config_translation locale -y
 
 # Vider les caches
 drush cache:rebuild
@@ -200,4 +205,3 @@ Ce projet est sous licence propriétaire. Tous droits réservés à EasySystem e
 ---
 
 **Développé avec ❤️ par EasySystem pour Romus**
-

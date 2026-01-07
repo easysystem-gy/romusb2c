@@ -36,10 +36,6 @@
         "drupal/backup_migrate": "^5.0",
         "drupal/redirect": "^1.9",
         "drupal/xmlsitemap": "^1.5",
-        "drupal/language": "^1.0",
-        "drupal/content_translation": "^1.0",
-        "drupal/config_translation": "^1.0",
-        "drupal/locale": "^1.0",
         "drush/drush": "^12.4"
     },
     "require-dev": {
@@ -97,4 +93,3 @@
         }
     }
 }
-
