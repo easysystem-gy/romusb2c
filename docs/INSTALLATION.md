@@ -122,6 +122,9 @@ $settings['hash_salt'] = 'GENERER_UNE_CLE_ALEATOIRE_LONGUE_ET_SECURISEE';
 # Activation des modules de langue (intégrés à Core)
 ./vendor/bin/drush en language content_translation config_translation locale -y
 
+# Activation des modules Commerce
+./vendor/bin/drush en commerce commerce_product commerce_cart commerce_checkout commerce_order commerce_payment commerce_price -y
+
 # Activation des modules personnalisés Romus
 ./vendor/bin/drush en romus_products romus_commerce -y
 
@@ -156,11 +159,14 @@ chmod 755 web/sites/default/files
 ### Drupal Commerce
 
 ```bash
-# Activation des modules Commerce
+# Activation des modules Commerce (déjà inclus dans composer.json)
 ./vendor/bin/drush en commerce commerce_product commerce_cart commerce_checkout commerce_order commerce_payment commerce_price -y
 
-# Configuration de base Commerce
-./vendor/bin/drush commerce:install
+# Création du store par défaut et configuration de base
+./vendor/bin/drush config:set commerce_store.settings default_store 1 -y
+
+# Nettoyage du cache après activation Commerce
+./vendor/bin/drush cache:rebuild
 ```
 
 ### Modules personnalisés Romus
@@ -315,6 +321,14 @@ CSS_JS_PREPROCESS=1
 
 ### Problèmes courants
 
+#### Erreur "There are no commands defined in the 'commerce' namespace"
+```bash
+# La commande drush commerce:install n'existe pas
+# Utiliser à la place :
+./vendor/bin/drush en commerce commerce_product commerce_cart commerce_checkout commerce_order commerce_payment commerce_price -y
+./vendor/bin/drush cache:rebuild
+```
+
 #### Erreur "Unknown themes: romusworld"
 ```bash
 # Vérifier que le thème existe
@@ -377,4 +391,3 @@ Pour toute question ou problème :
 **Dernière mise à jour** : Janvier 2026  
 **Drupal** : 10.2+  
 **PHP** : 8.1+
-
