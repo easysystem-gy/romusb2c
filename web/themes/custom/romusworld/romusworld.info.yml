@@ -2,15 +2,10 @@ name: 'Romusworld'
 type: theme
 description: 'Thème personnalisé pour le site Romusworld B2C - Design rouge et gris, responsive'
 core_version_requirement: ^10
-base theme: classy
+# Pas de base theme - utilise les templates Drupal core par défaut
 screenshot: screenshot.png
 
-libraries-override:
-  system/base:
-    css:
-      component:
-        /core/themes/stable/css/system/components/ajax-progress.module.css: false
-        /core/themes/stable/css/system/components/autocomplete-loading.module.css: false
+# Libraries override supprimées - thèmes stable/classy n'existent plus dans Drupal 10
 
 libraries:
   - romusworld/global-styling
