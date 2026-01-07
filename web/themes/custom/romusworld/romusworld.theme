@@ -1,0 +1,117 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the Romusworld theme.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_preprocess_HOOK() for HTML document templates.
+ */
+function romusworld_preprocess_html(&$variables) {
+  // Ajouter des classes CSS au body
+  $variables['attributes']['class'][] = 'romusworld-theme';
+  
+  // Ajouter les librairies CSS et JS
+  $variables['#attached']['library'][] = 'romusworld/global-styling';
+  $variables['#attached']['library'][] = 'romusworld/global-scripts';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page templates.
+ */
+function romusworld_preprocess_page(&$variables) {
+  // Ajouter les librairies à la page
+  $variables['#attached']['library'][] = 'romusworld/global-styling';
+  $variables['#attached']['library'][] = 'romusworld/global-scripts';
+  
+  // Variables pour le template
+  $variables['site_name'] = \Drupal::config('system.site')->get('name');
+  $variables['site_slogan'] = \Drupal::config('system.site')->get('slogan');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node templates.
+ */
+function romusworld_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  
+  // Ajouter des classes CSS selon le type de contenu
+  $variables['attributes']['class'][] = 'node--type-' . $node->getType();
+  
+  // Pour les produits Romus
+  if (in_array($node->getType(), ['produit_tapis', 'produit_outillage', 'produit_signaletique'])) {
+    $variables['attributes']['class'][] = 'romus-product';
+    $variables['#attached']['library'][] = 'romusworld/global-styling';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function romusworld_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  // Suggestions de templates selon la route
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  
+  if ($route_name) {
+    $suggestions[] = 'page__' . str_replace(['.', '-'], '_', $route_name);
+  }
+  
+  // Suggestions pour Commerce
+  if (strpos($route_name, 'commerce') !== FALSE) {
+    $suggestions[] = 'page__commerce';
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function romusworld_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Ajouter des classes CSS aux formulaires
+  if (strpos($form_id, 'commerce') !== FALSE) {
+    $form['#attributes']['class'][] = 'romus-commerce-form';
+    $form['#attached']['library'][] = 'romusworld/global-styling';
+  }
+  
+  // Formulaire de recherche
+  if ($form_id == 'search_block_form') {
+    $form['#attributes']['class'][] = 'romus-search-form';
+    $form['keys']['#attributes']['placeholder'] = t('Rechercher un produit...');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for block templates.
+ */
+function romusworld_preprocess_block(&$variables) {
+  // Ajouter les librairies aux blocs importants
+  $plugin_id = $variables['plugin_id'];
+  
+  if (in_array($plugin_id, ['system_main_block', 'system_branding_block', 'commerce_cart'])) {
+    $variables['#attached']['library'][] = 'romusworld/global-styling';
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function romusworld_library_info_alter(&$libraries, $extension) {
+  // S'assurer que nos librairies sont bien chargées
+  if ($extension == 'romusworld') {
+    // Forcer le rechargement des CSS en développement
+    if (\Drupal::service('kernel')->getEnvironment() == 'dev') {
+      foreach ($libraries as &$library) {
+        if (isset($library['css'])) {
+          foreach ($library['css'] as $type => $files) {
+            foreach ($files as $file => $options) {
+              $libraries[$extension]['css'][$type][$file]['preprocess'] = FALSE;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

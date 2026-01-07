@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Template HTML de base pour le thème Romusworld
+ */
+#}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+    <head-placeholder token="{{ placeholder_token }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token }}">
+    <js-placeholder token="{{ placeholder_token }}">
+    
+    {# Forcer le chargement des CSS Romusworld #}
+    {{ attach_library('romusworld/global-styling') }}
+    {{ attach_library('romusworld/global-scripts') }}
+  </head>
+  <body{{ attributes.addClass('romusworld-theme') }}>
+    {#
+      Keyboard navigation/accessibility link to main content section in
+      page.html.twig.
+    #}
+    <a href="#main-content" class="visually-hidden focusable skip-link">
+      {{ 'Skip to main content'|t }}
+    </a>
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token }}">
+  </body>
+</html>
+

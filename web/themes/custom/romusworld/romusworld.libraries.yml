@@ -1,9 +1,11 @@
 global-styling:
   css:
+    base:
+      css/base.css: { weight: -10 }
     theme:
-      css/style.css: {}
-      css/components.css: {}
-      css/responsive.css: {}
+      css/style.css: { weight: 0 }
+      css/components.css: { weight: 1 }
+      css/responsive.css: { weight: 2 }
   dependencies:
     - core/normalize
     - core/drupal
@@ -15,4 +17,3 @@ global-scripts:
   dependencies:
     - core/jquery
     - core/drupal
-

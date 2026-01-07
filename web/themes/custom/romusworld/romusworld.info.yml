@@ -2,8 +2,15 @@ name: 'Romusworld'
 type: theme
 description: 'Thème personnalisé pour le site Romusworld B2C - Design rouge et gris, responsive'
 core_version_requirement: ^10
-base theme: stable9
+base theme: classy
 screenshot: screenshot.png
+
+libraries-override:
+  system/base:
+    css:
+      component:
+        /core/themes/stable/css/system/components/ajax-progress.module.css: false
+        /core/themes/stable/css/system/components/autocomplete-loading.module.css: false
 
 libraries:
   - romusworld/global-styling
@@ -24,4 +31,3 @@ regions:
   footer_second: 'Footer second'
   footer_third: 'Footer third'
   footer_fourth: 'Footer fourth'
-
