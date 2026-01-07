@@ -1,369 +1,242 @@
 /**
  * @file
- * Scripts pour la navigation Romusworld
+ * JavaScript pour la navigation Romusworld
  */
 
 (function ($, Drupal) {
   'use strict';
 
   /**
-   * Navigation responsive et interactions
+   * Comportement de navigation responsive
    */
   Drupal.behaviors.romusworldNavigation = {
     attach: function (context, settings) {
       
-      $('.main-navigation', context).once('navigation-init').each(function () {
-        const $nav = $(this);
+      this.initMobileMenu(context);
+      this.initMegaMenu(context);
+      this.initSearchToggle(context);
+      this.initStickyHeader(context);
+      
+    },
+
+    /**
+     * Menu mobile hamburger
+     */
+    initMobileMenu: function (context) {
+      
+      // Créer le bouton hamburger s'il n'existe pas
+      if (!$('.mobile-menu-toggle').length) {
+        var $toggle = $('<button class="mobile-menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>');
+        $('.site-header .container').append($toggle);
+      }
+      
+      $('.mobile-menu-toggle', context).once('romusworld-mobile-menu').on('click', function () {
+        var $toggle = $(this);
+        var $nav = $('.main-navigation');
         
-        // Initialiser la navigation mobile
-        initMobileNavigation($nav);
+        $toggle.toggleClass('mobile-menu-toggle--active');
+        $nav.toggleClass('is-open');
         
-        // Initialiser les menus déroulants
-        initDropdownMenus($nav);
+        // Accessibilité
+        var isOpen = $nav.hasClass('is-open');
+        $toggle.attr('aria-expanded', isOpen);
         
-        // Initialiser la navigation sticky
-        initStickyNavigation($nav);
+        // Empêcher le scroll du body quand le menu est ouvert
+        $('body').toggleClass('mobile-menu-open', isOpen);
+      });
+      
+      // Fermer le menu en cliquant à l'extérieur
+      $(document).on('click', function (e) {
+        if (!$(e.target).closest('.main-navigation, .mobile-menu-toggle').length) {
+          $('.main-navigation').removeClass('is-open');
+          $('.mobile-menu-toggle').removeClass('mobile-menu-toggle--active').attr('aria-expanded', false);
+          $('body').removeClass('mobile-menu-open');
+        }
+      });
+      
+      // Fermer le menu au redimensionnement
+      $(window).on('resize', function () {
+        if ($(window).width() >= 768) {
+          $('.main-navigation').removeClass('is-open');
+          $('.mobile-menu-toggle').removeClass('mobile-menu-toggle--active').attr('aria-expanded', false);
+          $('body').removeClass('mobile-menu-open');
+        }
+      });
+    },
+
+    /**
+     * Mega menu pour desktop
+     */
+    initMegaMenu: function (context) {
+      
+      $('.main-navigation .menu-item--expanded', context).once('romusworld-mega-menu').each(function () {
+        var $item = $(this);
+        var $link = $item.find('> a');
+        var $submenu = $item.find('> .sub-menu');
         
-        // Initialiser la recherche
-        initSearchToggle($nav);
+        var showTimeout, hideTimeout;
         
-        // Initialiser les indicateurs actifs
-        initActiveStates($nav);
+        $item.hover(
+          function () {
+            clearTimeout(hideTimeout);
+            showTimeout = setTimeout(function () {
+              $submenu.addClass('sub-menu--visible');
+              $link.addClass('menu-link--active');
+            }, 150);
+          },
+          function () {
+            clearTimeout(showTimeout);
+            hideTimeout = setTimeout(function () {
+              $submenu.removeClass('sub-menu--visible');
+              $link.removeClass('menu-link--active');
+            }, 300);
+          }
+        );
+        
+        // Navigation au clavier
+        $link.on('focus', function () {
+          $submenu.addClass('sub-menu--visible');
+          $(this).addClass('menu-link--active');
+        });
+        
+        $item.on('focusout', function (e) {
+          // Vérifier si le focus reste dans le sous-menu
+          setTimeout(function () {
+            if (!$item.find(':focus').length) {
+              $submenu.removeClass('sub-menu--visible');
+              $link.removeClass('menu-link--active');
+            }
+          }, 100);
+        });
+      });
+    },
+
+    /**
+     * Toggle de recherche
+     */
+    initSearchToggle: function (context) {
+      
+      $('.search-toggle', context).once('romusworld-search').on('click', function (e) {
+        e.preventDefault();
+        
+        var $toggle = $(this);
+        var $searchForm = $('.search-form');
+        
+        $searchForm.toggleClass('search-form--visible');
+        
+        if ($searchForm.hasClass('search-form--visible')) {
+          $searchForm.find('input[type="search"]').focus();
+        }
+      });
+      
+      // Fermer la recherche avec Escape
+      $(document).on('keydown', function (e) {
+        if (e.key === 'Escape') {
+          $('.search-form').removeClass('search-form--visible');
+        }
+      });
+    },
+
+    /**
+     * Header sticky
+     */
+    initStickyHeader: function (context) {
+      
+      var $header = $('.site-header');
+      var headerHeight = $header.outerHeight();
+      var scrollThreshold = headerHeight;
+      
+      $(window).on('scroll', function () {
+        var scrollTop = $(window).scrollTop();
+        
+        if (scrollTop > scrollThreshold) {
+          $header.addClass('site-header--sticky');
+          $('body').css('padding-top', headerHeight + 'px');
+        } else {
+          $header.removeClass('site-header--sticky');
+          $('body').css('padding-top', '0');
+        }
+      });
+      
+      // Recalculer au redimensionnement
+      $(window).on('resize', function () {
+        headerHeight = $header.outerHeight();
+        scrollThreshold = headerHeight;
       });
     }
   };
 
   /**
-   * Navigation mobile avec menu hamburger
+   * Comportement du breadcrumb
    */
-  function initMobileNavigation($nav) {
-    const $toggle = $nav.find('.mobile-menu-toggle');
-    const $menu = $nav.find('.main-menu');
-    
-    // Créer le bouton hamburger s'il n'existe pas
-    if (!$toggle.length) {
-      const $hamburger = $(`
-        <button class="mobile-menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-        </button>
-      `);
-      $nav.prepend($hamburger);
-    }
-
-    // Toggle du menu mobile
-    $(document).on('click', '.mobile-menu-toggle', function (e) {
-      e.preventDefault();
-      const $button = $(this);
-      const $menu = $nav.find('.main-menu');
-      const isOpen = $button.attr('aria-expanded') === 'true';
+  Drupal.behaviors.romusworldBreadcrumb = {
+    attach: function (context, settings) {
       
-      if (isOpen) {
-        closeMobileMenu($button, $menu);
-      } else {
-        openMobileMenu($button, $menu);
-      }
-    });
-
-    // Fermer le menu en cliquant à l'extérieur
-    $(document).on('click', function (e) {
-      if (!$nav[0].contains(e.target) && $nav.hasClass('mobile-menu-open')) {
-        const $button = $nav.find('.mobile-menu-toggle');
-        const $menu = $nav.find('.main-menu');
-        closeMobileMenu($button, $menu);
-      }
-    });
-
-    // Fermer le menu avec Escape
-    $(document).on('keydown', function (e) {
-      if (e.key === 'Escape' && $nav.hasClass('mobile-menu-open')) {
-        const $button = $nav.find('.mobile-menu-toggle');
-        const $menu = $nav.find('.main-menu');
-        closeMobileMenu($button, $menu);
-      }
-    });
-
-    // Gérer le redimensionnement de la fenêtre
-    $(window).on('resize', Romusworld.debounce(function () {
-      if (window.innerWidth > 1024 && $nav.hasClass('mobile-menu-open')) {
-        const $button = $nav.find('.mobile-menu-toggle');
-        const $menu = $nav.find('.main-menu');
-        closeMobileMenu($button, $menu);
-      }
-    }, 250));
-  }
-
-  function openMobileMenu($button, $menu) {
-    $button.attr('aria-expanded', 'true').addClass('active');
-    $menu.addClass('mobile-open');
-    $button.closest('.main-navigation').addClass('mobile-menu-open');
-    $('body').addClass('mobile-menu-open');
-    
-    // Focus sur le premier lien
-    const $firstLink = $menu.find('a').first();
-    if ($firstLink.length) {
-      setTimeout(() => $firstLink.focus(), 300);
-    }
-  }
-
-  function closeMobileMenu($button, $menu) {
-    $button.attr('aria-expanded', 'false').removeClass('active');
-    $menu.removeClass('mobile-open');
-    $button.closest('.main-navigation').removeClass('mobile-menu-open');
-    $('body').removeClass('mobile-menu-open');
-  }
-
-  /**
-   * Menus déroulants (dropdowns)
-   */
-  function initDropdownMenus($nav) {
-    const $dropdownToggles = $nav.find('.menu-item--expanded > a');
-    
-    $dropdownToggles.each(function () {
-      const $toggle = $(this);
-      const $item = $toggle.parent();
-      const $submenu = $item.find('.menu').first();
-      
-      // Ajouter l'indicateur de sous-menu
-      if (!$toggle.find('.dropdown-indicator').length) {
-        $toggle.append('<span class="dropdown-indicator" aria-hidden="true"></span>');
-      }
-      
-      // Gestion hover sur desktop
-      if (window.innerWidth > 1024) {
-        $item.on('mouseenter', function () {
-          openDropdown($item, $submenu);
-        });
+      $('.breadcrumb', context).once('romusworld-breadcrumb').each(function () {
+        var $breadcrumb = $(this);
+        var $items = $breadcrumb.find('.breadcrumb-item');
         
-        $item.on('mouseleave', function () {
-          closeDropdown($item, $submenu);
-        });
-      }
-      
-      // Gestion click/touch
-      $toggle.on('click', function (e) {
-        if (window.innerWidth <= 1024) {
-          e.preventDefault();
-          const isOpen = $item.hasClass('dropdown-open');
+        // Masquer les éléments intermédiaires sur mobile si trop nombreux
+        if ($items.length > 3 && $(window).width() < 768) {
+          $items.slice(1, -1).addClass('breadcrumb-item--hidden');
           
-          // Fermer tous les autres dropdowns
-          $nav.find('.dropdown-open').removeClass('dropdown-open');
-          $nav.find('.submenu-open').removeClass('submenu-open');
-          
-          if (!isOpen) {
-            openDropdown($item, $submenu);
+          // Ajouter un indicateur "..."
+          if (!$breadcrumb.find('.breadcrumb-ellipsis').length) {
+            $items.eq(1).before('<li class="breadcrumb-item breadcrumb-ellipsis">...</li>');
           }
         }
       });
-    });
-
-    // Fermer les dropdowns en cliquant à l'extérieur
-    $(document).on('click', function (e) {
-      if (!$nav[0].contains(e.target)) {
-        $nav.find('.dropdown-open').removeClass('dropdown-open');
-        $nav.find('.submenu-open').removeClass('submenu-open');
-      }
-    });
-  }
-
-  function openDropdown($item, $submenu) {
-    $item.addClass('dropdown-open');
-    $submenu.addClass('submenu-open');
-    
-    // Ajuster la position si nécessaire
-    adjustDropdownPosition($submenu);
-  }
-
-  function closeDropdown($item, $submenu) {
-    $item.removeClass('dropdown-open');
-    $submenu.removeClass('submenu-open');
-  }
-
-  function adjustDropdownPosition($submenu) {
-    const submenuRect = $submenu[0].getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    
-    // Si le sous-menu dépasse à droite
-    if (submenuRect.right > viewportWidth) {
-      $submenu.addClass('dropdown-right');
-    } else {
-      $submenu.removeClass('dropdown-right');
+      
+      // Réafficher tous les éléments sur desktop
+      $(window).on('resize', function () {
+        if ($(window).width() >= 768) {
+          $('.breadcrumb-item--hidden').removeClass('breadcrumb-item--hidden');
+          $('.breadcrumb-ellipsis').remove();
+        }
+      });
     }
-  }
+  };
 
   /**
-   * Navigation sticky
+   * Comportement de la recherche
    */
-  function initStickyNavigation($nav) {
-    const $header = $nav.closest('.site-header');
-    let lastScrollTop = 0;
-    let isSticky = false;
-    
-    const handleScroll = Romusworld.throttle(function () {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const headerHeight = $header.outerHeight();
+  Drupal.behaviors.romusworldSearch = {
+    attach: function (context, settings) {
       
-      // Ajouter/retirer la classe sticky
-      if (scrollTop > headerHeight && !isSticky) {
-        $header.addClass('header-sticky');
-        $('body').css('padding-top', headerHeight + 'px');
-        isSticky = true;
-      } else if (scrollTop <= headerHeight && isSticky) {
-        $header.removeClass('header-sticky');
-        $('body').css('padding-top', '0');
-        isSticky = false;
-      }
-      
-      // Masquer/afficher la navigation au scroll (optionnel)
-      if (isSticky) {
-        if (scrollTop > lastScrollTop && scrollTop > headerHeight * 2) {
-          // Scroll vers le bas - masquer
-          $header.addClass('header-hidden');
-        } else {
-          // Scroll vers le haut - afficher
-          $header.removeClass('header-hidden');
-        }
-      }
-      
-      lastScrollTop = scrollTop;
-    }, 100);
-    
-    $(window).on('scroll', handleScroll);
-  }
-
-  /**
-   * Toggle de la recherche
-   */
-  function initSearchToggle($nav) {
-    const $searchToggle = $nav.find('.search-toggle');
-    const $searchForm = $nav.find('.search-form');
-    
-    $searchToggle.on('click', function (e) {
-      e.preventDefault();
-      const isOpen = $searchForm.hasClass('search-open');
-      
-      if (isOpen) {
-        closeSearch($searchForm, $searchToggle);
-      } else {
-        openSearch($searchForm, $searchToggle);
-      }
-    });
-    
-    // Fermer la recherche avec Escape
-    $(document).on('keydown', function (e) {
-      if (e.key === 'Escape' && $searchForm.hasClass('search-open')) {
-        closeSearch($searchForm, $searchToggle);
-      }
-    });
-    
-    // Fermer en cliquant à l'extérieur
-    $(document).on('click', function (e) {
-      if (!$searchForm[0].contains(e.target) && !$searchToggle[0].contains(e.target)) {
-        if ($searchForm.hasClass('search-open')) {
-          closeSearch($searchForm, $searchToggle);
-        }
-      }
-    });
-  }
-
-  function openSearch($searchForm, $searchToggle) {
-    $searchForm.addClass('search-open');
-    $searchToggle.addClass('active');
-    
-    // Focus sur le champ de recherche
-    const $input = $searchForm.find('input[type="search"]');
-    setTimeout(() => $input.focus(), 300);
-  }
-
-  function closeSearch($searchForm, $searchToggle) {
-    $searchForm.removeClass('search-open');
-    $searchToggle.removeClass('active');
-  }
-
-  /**
-   * États actifs de la navigation
-   */
-  function initActiveStates($nav) {
-    const currentPath = window.location.pathname;
-    const $menuLinks = $nav.find('.menu a');
-    
-    $menuLinks.each(function () {
-      const $link = $(this);
-      const linkPath = $link.attr('href');
-      
-      // Marquer le lien actif
-      if (linkPath === currentPath || 
-          (linkPath !== '/' && currentPath.startsWith(linkPath))) {
-        $link.addClass('active');
-        $link.closest('.menu-item').addClass('menu-item--active-trail');
+      $('.search-form input[type="search"]', context).once('romusworld-search-input').each(function () {
+        var $input = $(this);
+        var $form = $input.closest('form');
         
-        // Marquer les parents actifs
-        $link.parents('.menu-item--expanded').addClass('menu-item--active-trail');
-      }
-    });
-  }
-
-  /**
-   * Accessibilité clavier pour la navigation
-   */
-  $(document).on('keydown', '.main-navigation a', function (e) {
-    const $link = $(this);
-    const $item = $link.closest('.menu-item');
-    
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        if ($item.hasClass('menu-item--expanded')) {
-          // Ouvrir le sous-menu et focus sur le premier élément
-          const $submenu = $item.find('.menu').first();
-          openDropdown($item, $submenu);
-          $submenu.find('a').first().focus();
-        } else {
-          // Focus sur l'élément suivant
-          const $nextItem = $item.next('.menu-item');
-          if ($nextItem.length) {
-            $nextItem.find('> a').focus();
+        // Recherche en temps réel (debounced)
+        var searchTimeout;
+        $input.on('input', function () {
+          clearTimeout(searchTimeout);
+          var query = $(this).val();
+          
+          if (query.length >= 3) {
+            searchTimeout = setTimeout(function () {
+              // Ici on pourrait implémenter une recherche AJAX
+              console.log('Recherche:', query);
+            }, 500);
           }
-        }
-        break;
+        });
         
-      case 'ArrowUp':
-        e.preventDefault();
-        const $prevItem = $item.prev('.menu-item');
-        if ($prevItem.length) {
-          $prevItem.find('> a').focus();
-        }
-        break;
+        // Effacer la recherche
+        var $clearBtn = $('<button type="button" class="search-clear" aria-label="Effacer">×</button>');
+        $input.after($clearBtn);
         
-      case 'ArrowRight':
-        e.preventDefault();
-        if ($item.hasClass('menu-item--expanded')) {
-          const $submenu = $item.find('.menu').first();
-          openDropdown($item, $submenu);
-          $submenu.find('a').first().focus();
-        }
-        break;
+        $clearBtn.on('click', function () {
+          $input.val('').focus();
+          // Effacer les résultats de recherche
+        });
         
-      case 'ArrowLeft':
-        e.preventDefault();
-        const $parentItem = $item.closest('.menu-item--expanded');
-        if ($parentItem.length) {
-          closeDropdown($parentItem, $parentItem.find('.menu').first());
-          $parentItem.find('> a').focus();
-        }
-        break;
-        
-      case 'Escape':
-        e.preventDefault();
-        const $openParent = $item.closest('.dropdown-open');
-        if ($openParent.length) {
-          closeDropdown($openParent, $openParent.find('.menu').first());
-          $openParent.find('> a').focus();
-        }
-        break;
+        // Afficher/masquer le bouton d'effacement
+        $input.on('input', function () {
+          $clearBtn.toggle($(this).val().length > 0);
+        });
+      });
     }
-  });
+  };
 
 })(jQuery, Drupal);
 

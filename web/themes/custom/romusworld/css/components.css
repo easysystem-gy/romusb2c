@@ -1,0 +1,303 @@
+/**
+ * @file
+ * Composants spécifiques Romusworld
+ * Produits, panier, formulaires, etc.
+ */
+
+/* === COMPOSANTS PRODUITS === */
+
+/* Carte produit */
+.product-card {
+  background: var(--romus-white);
+  border: 1px solid var(--romus-gray-light);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.15);
+  border-color: var(--romus-red-light);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.product-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--romus-gray-dark);
+  margin-bottom: var(--spacing-xs);
+}
+
+.product-code {
+  font-size: 0.9rem;
+  color: var(--romus-gray);
+  font-family: monospace;
+  background: var(--romus-bg-light);
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-bottom: var(--spacing-xs);
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--romus-red);
+  margin-bottom: var(--spacing-sm);
+}
+
+.product-description {
+  color: var(--romus-gray-dark);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Badges produits */
+.product-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 12px;
+  margin-right: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.badge-new {
+  background-color: var(--romus-red);
+  color: var(--romus-white);
+}
+
+.badge-bestseller {
+  background-color: #28a745;
+  color: var(--romus-white);
+}
+
+.badge-promo {
+  background-color: #ff6b35;
+  color: var(--romus-white);
+}
+
+/* === COMPOSANTS E-COMMERCE === */
+
+/* Panier */
+.cart-summary {
+  background: var(--romus-bg-light);
+  border: 2px solid var(--romus-red-light);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.cart-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--romus-red);
+  text-align: right;
+  border-top: 2px solid var(--romus-gray-light);
+  padding-top: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--romus-gray-light);
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: var(--spacing-sm);
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-title {
+  font-weight: 600;
+  color: var(--romus-gray-dark);
+  margin-bottom: 4px;
+}
+
+.cart-item-price {
+  color: var(--romus-red);
+  font-weight: 600;
+}
+
+/* Formulaires */
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: var(--romus-gray-dark);
+  margin-bottom: var(--spacing-xs);
+}
+
+.form-control {
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 2px solid var(--romus-gray-light);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--romus-red);
+  box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+}
+
+.form-control.error {
+  border-color: #dc3545;
+}
+
+.form-error {
+  color: #dc3545;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* === COMPOSANTS NAVIGATION === */
+
+/* Breadcrumb */
+.breadcrumb {
+  background: var(--romus-bg-light);
+  padding: var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-lg);
+}
+
+.breadcrumb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item {
+  margin-right: var(--spacing-sm);
+}
+
+.breadcrumb-item:not(:last-child)::after {
+  content: '>';
+  margin-left: var(--spacing-sm);
+  color: var(--romus-gray);
+}
+
+.breadcrumb-link {
+  color: var(--romus-gray);
+  text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+  color: var(--romus-red);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: var(--spacing-lg) 0;
+}
+
+.pagination a,
+.pagination span {
+  display: block;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin: 0 2px;
+  border: 1px solid var(--romus-gray-light);
+  color: var(--romus-gray-dark);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+  background-color: var(--romus-red);
+  color: var(--romus-white);
+  border-color: var(--romus-red);
+}
+
+.pagination .current {
+  background-color: var(--romus-red);
+  color: var(--romus-white);
+  border-color: var(--romus-red);
+}
+
+/* === COMPOSANTS CONTENU === */
+
+/* Messages système */
+.messages {
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border-radius: 4px;
+  border-left: 4px solid;
+}
+
+.messages--status {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.messages--warning {
+  background-color: #fff3cd;
+  border-color: #ffc107;
+  color: #856404;
+}
+
+.messages--error {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+/* Tableaux */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-lg);
+}
+
+.table th,
+.table td {
+  padding: var(--spacing-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--romus-gray-light);
+}
+
+.table th {
+  background-color: var(--romus-bg-light);
+  font-weight: 600;
+  color: var(--romus-gray-dark);
+}
+
+.table tbody tr:hover {
+  background-color: rgba(196, 30, 58, 0.05);
+}
+

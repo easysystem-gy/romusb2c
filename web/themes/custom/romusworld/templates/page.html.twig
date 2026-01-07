@@ -1,0 +1,204 @@
+{#
+/**
+ * @file
+ * Template de page principal pour le thème Romusworld
+ */
+#}
+<div class="page-wrapper">
+  
+  {# Header #}
+  <header class="site-header" role="banner">
+    <div class="container">
+      <div class="row align-items-center">
+        
+        {# Logo #}
+        <div class="col-6 col-md-3">
+          <div class="site-logo">
+            <a href="{{ path('<front>') }}" title="{{ 'Accueil'|t }}" rel="home">
+              <img src="{{ base_path ~ directory }}/images/logo-romusworld.svg" alt="{{ site_name }}" />
+            </a>
+          </div>
+        </div>
+        
+        {# Navigation principale (desktop) #}
+        <div class="col-md-6 d-none d-md-block">
+          {{ page.primary_menu }}
+        </div>
+        
+        {# Actions header (panier, compte, recherche) #}
+        <div class="col-6 col-md-3 text-right">
+          <div class="header-actions">
+            
+            {# Recherche #}
+            <button class="search-toggle btn-icon" aria-label="{{ 'Rechercher'|t }}">
+              <i class="icon-search"></i>
+            </button>
+            
+            {# Compte utilisateur #}
+            {% if logged_in %}
+              <a href="{{ path('user.page') }}" class="btn-icon" title="{{ 'Mon compte'|t }}">
+                <i class="icon-user"></i>
+              </a>
+            {% else %}
+              <a href="{{ path('user.login') }}" class="btn-icon" title="{{ 'Se connecter'|t }}">
+                <i class="icon-user"></i>
+              </a>
+            {% endif %}
+            
+            {# Panier #}
+            <a href="{{ path('commerce_cart.page') }}" class="btn-icon cart-link" title="{{ 'Panier'|t }}">
+              <i class="icon-cart"></i>
+              <span class="cart-count">0</span>
+            </a>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    {# Formulaire de recherche (masqué par défaut) #}
+    <div class="search-form">
+      <div class="container">
+        <form action="{{ path('view.search.page_1') }}" method="get">
+          <div class="search-input-group">
+            <input type="search" name="search" placeholder="{{ 'Rechercher un produit...'|t }}" />
+            <button type="submit" class="btn btn-primary">{{ 'Rechercher'|t }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+  </header>
+  
+  {# Navigation mobile #}
+  <nav class="main-navigation d-md-none" role="navigation">
+    {{ page.primary_menu }}
+  </nav>
+  
+  {# Messages système #}
+  {% if page.highlighted %}
+    <div class="highlighted">
+      <div class="container">
+        {{ page.highlighted }}
+      </div>
+    </div>
+  {% endif %}
+  
+  {# Breadcrumb #}
+  {% if page.breadcrumb %}
+    <div class="breadcrumb-wrapper">
+      <div class="container">
+        {{ page.breadcrumb }}
+      </div>
+    </div>
+  {% endif %}
+  
+  {# Contenu principal #}
+  <main class="main-content" role="main">
+    <div class="container">
+      
+      {% if page.sidebar_first %}
+        <div class="row">
+          <div class="col-lg-3">
+            <aside class="sidebar sidebar-first" role="complementary">
+              {{ page.sidebar_first }}
+            </aside>
+          </div>
+          <div class="col-lg-9">
+            <div class="main-content-inner">
+              {{ page.content }}
+            </div>
+          </div>
+        </div>
+      {% elseif page.sidebar_second %}
+        <div class="row">
+          <div class="col-lg-9">
+            <div class="main-content-inner">
+              {{ page.content }}
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <aside class="sidebar sidebar-second" role="complementary">
+              {{ page.sidebar_second }}
+            </aside>
+          </div>
+        </div>
+      {% else %}
+        <div class="main-content-inner">
+          {{ page.content }}
+        </div>
+      {% endif %}
+      
+    </div>
+  </main>
+  
+  {# Footer #}
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      
+      {# Colonnes footer #}
+      {% if page.footer_first or page.footer_second or page.footer_third or page.footer_fourth %}
+        <div class="footer-columns">
+          
+          {% if page.footer_first %}
+            <div class="footer-column">
+              <h3>{{ 'Produits'|t }}</h3>
+              {{ page.footer_first }}
+            </div>
+          {% endif %}
+          
+          {% if page.footer_second %}
+            <div class="footer-column">
+              <h3>{{ 'Support'|t }}</h3>
+              {{ page.footer_second }}
+            </div>
+          {% endif %}
+          
+          {% if page.footer_third %}
+            <div class="footer-column">
+              <h3>{{ 'Entreprise'|t }}</h3>
+              {{ page.footer_third }}
+            </div>
+          {% endif %}
+          
+          {% if page.footer_fourth %}
+            <div class="footer-column">
+              <h3>{{ 'Contact'|t }}</h3>
+              {{ page.footer_fourth }}
+            </div>
+          {% endif %}
+          
+        </div>
+      {% endif %}
+      
+      {# Footer bottom #}
+      <div class="footer-bottom">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <p class="copyright">
+              © {{ "now"|date("Y") }} {{ site_name }}. {{ 'Tous droits réservés.'|t }}
+            </p>
+          </div>
+          <div class="col-md-6 text-md-right">
+            <nav class="footer-legal">
+              <a href="{{ path('entity.node.canonical', {'node': 'mentions-legales'}) }}">{{ 'Mentions légales'|t }}</a>
+              <a href="{{ path('entity.node.canonical', {'node': 'politique-confidentialite'}) }}">{{ 'Politique de confidentialité'|t }}</a>
+              <a href="{{ path('entity.node.canonical', {'node': 'cgv'}) }}">{{ 'CGV'|t }}</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </footer>
+  
+  {# Page bottom #}
+  {% if page.page_bottom %}
+    <div class="page-bottom">
+      {{ page.page_bottom }}
+    </div>
+  {% endif %}
+  
+</div>
+

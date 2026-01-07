@@ -1,0 +1,18 @@
+global-styling:
+  css:
+    theme:
+      css/style.css: {}
+      css/components.css: {}
+      css/responsive.css: {}
+  dependencies:
+    - core/normalize
+    - core/drupal
+
+global-scripts:
+  js:
+    js/romusworld.js: {}
+    js/navigation.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
