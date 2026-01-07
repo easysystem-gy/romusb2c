@@ -2,7 +2,7 @@ name: 'Romusworld'
 type: theme
 description: 'Thème personnalisé pour le site Romusworld B2C - Design rouge et gris, responsive'
 core_version_requirement: ^10
-# Pas de base theme - utilise les templates Drupal core par défaut
+base theme: starterkit_theme
 screenshot: screenshot.png
 
 # Libraries override supprimées - thèmes stable/classy n'existent plus dans Drupal 10
