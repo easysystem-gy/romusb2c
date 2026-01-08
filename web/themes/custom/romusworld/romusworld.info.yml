@@ -2,7 +2,7 @@ name: 'Romusworld'
 type: theme
 description: 'Thème personnalisé pour le site Romusworld B2C - Design rouge et gris, responsive'
 core_version_requirement: ^10
-base theme: romus
+base theme: stable9
 screenshot: screenshot.png
 
 libraries:
