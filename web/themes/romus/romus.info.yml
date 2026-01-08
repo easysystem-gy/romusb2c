@@ -1,0 +1,22 @@
+name: romus
+type: theme
+'base theme': stable9
+version: 1.0.0
+libraries:
+  - romus/base
+  - romus/messages
+  - core/normalize
+libraries-extend:
+  user/drupal.user:
+    - romus/user
+  core/drupal.dropbutton:
+    - romus/dropbutton
+  core/drupal.dialog:
+    - romus/dialog
+  file/drupal.file:
+    - romus/file
+  core/drupal.progress:
+    - romus/progress
+description: ''
+core_version_requirement: ^10
+generator: 'starterkit_theme:10.6.1'
