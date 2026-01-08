@@ -1,0 +1,10 @@
+global-styling:
+  css:
+    theme:
+      css/base.css: { weight: -10 }
+      css/style.css: { weight: 0 }
+  js:
+    js/romus.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
