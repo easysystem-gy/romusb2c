@@ -101,6 +101,7 @@ function romusworld_library_info_alter(&$libraries, $extension) {
   // S'assurer que nos librairies sont bien chargées
   if ($extension == 'romusworld') {
     // Forcer le rechargement des CSS en développement
+    /*
     if (\Drupal::service('kernel')->getEnvironment() == 'dev') {
       foreach ($libraries as &$library) {
         if (isset($library['css'])) {
@@ -112,6 +113,7 @@ function romusworld_library_info_alter(&$libraries, $extension) {
         }
       }
     }
+    */
   }
 }
 
